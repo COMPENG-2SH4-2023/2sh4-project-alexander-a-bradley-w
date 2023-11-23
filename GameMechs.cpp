@@ -14,37 +14,42 @@ GameMechs::GameMechs()
     score = 0;
 
 
-    border = new objPos[(2*boardSizeX + 2*(boardSizeY-2))]; //amount of border obbjects required
-    
-    // Populate the border
-    int index = 0;
-    
-    // fill in top row
-    for(int xCoord=0; xCoord<boardSizeX; xCoord++)
-    {
-        border[index] = objPos(xCoord, 0, '#');
-        ++index;
-    }
-    
-    // fill in bottom row
-    for(int xCoord=0; xCoord<boardSizeX; xCoord++)
-    {
-        border[index] = objPos(xCoord, (boardSizeY-1), '#');
-        ++index;
-    }
+    board = new char*[boardSizeY]; // row lookup table
 
-    // fill in left side
-    for(int yCoord=1; yCoord<(boardSizeY-1); yCoord++)
+    for(int index=0; index<boardSizeY; index++) 
     {
-        border[index] = objPos(0, yCoord, '#');
-        ++index;
-    }
+        board[index] = new char[boardSizeX+1]; // need 1 additional x value for '\0'
+    }    
 
-    // fill in right side
-    for(int yCoord=1; yCoord<(boardSizeY-1); yCoord++)
+    // Draw default board
+    for(int yCoord=0; yCoord<boardSizeY; yCoord++)
     {
-        border[index] = objPos((boardSizeX-1), yCoord, '#');
-        ++index;
+        for(int xCoord=0; xCoord<(boardSizeX+1); xCoord++)
+        {
+            // Boarder characters
+            // left side and right sides
+            if(xCoord==0 || xCoord==(boardSizeX-1)) 
+            {
+                board[yCoord][xCoord] = '#';
+            }
+            // top and bottom
+            else if((yCoord==0 && xCoord>0 && xCoord<(boardSizeX-1)) || (yCoord==(boardSizeY-1) && xCoord>0 && xCoord<(boardSizeX-1)))
+            {
+                board[yCoord][xCoord] = '#';
+            }
+
+            // Null character
+            else if(xCoord==boardSizeX)
+            {
+                board[yCoord][xCoord] = '\0';
+            }
+
+            // empty characters
+            else
+            {
+                board[yCoord][xCoord] = ' ';
+            }
+        }
     }
 }
 
@@ -67,44 +72,59 @@ GameMechs::GameMechs(int boardX, int boardY)
 
     score = 0;
 
-    border = new objPos[(2*boardSizeX + 2*(boardSizeY-2))]; //amount of border obbjects required
+    board = new char*[boardSizeY]; // row lookup table
 
-    // Populate the border
-    int index = 0;
-    
-    // fill in top row
-    for(int xCoord=0; xCoord<boardSizeX; xCoord++)
+    for(int index=0; index<boardSizeY; index++) 
     {
-        border[index] = objPos(xCoord, 0, '#');
-        ++index;
-    }
-    
-    // fill in bottom row
-    for(int xCoord=0; xCoord<boardSizeX; xCoord++)
-    {
-        border[index] = objPos(xCoord, (boardSizeY-1), '#');
-        ++index;
-    }
+        board[index] = new char[boardSizeX+1]; // need 1 additional x value for '\0'
+    }    
 
-    // fill in left side
-    for(int yCoord=1; yCoord<(boardSizeY-1); yCoord++)
+    // Draw default board
+    for(int yCoord=0; yCoord<boardSizeY; yCoord++)
     {
-        border[index] = objPos(0, yCoord, '#');
-        ++index;
-    }
+        for(int xCoord=0; xCoord<(boardSizeX+1); xCoord++)
+        {
+            // Boarder characters
+            // left side and right sides
+            if(xCoord==0 || xCoord==(boardSizeX-1)) 
+            {
+                board[yCoord][xCoord] = '#';
+            }
+            // top and bottom
+            else if((yCoord==0 && xCoord>0 && xCoord<(boardSizeX-1)) || (yCoord==(boardSizeY-1) && xCoord>0 && xCoord<(boardSizeX-1)))
+            {
+                board[yCoord][xCoord] = '#';
+            }
 
-    // fill in right side
-    for(int yCoord=1; yCoord<(boardSizeY-1); yCoord++)
-    {
-        border[index] = objPos((boardSizeX-1), yCoord, '#');
-        ++index;
+            // Null character
+            else if(xCoord==boardSizeX)
+            {
+                board[yCoord][xCoord] = '\0';
+            }
+
+            // empty characters
+            else
+            {
+                board[yCoord][xCoord] = ' ';
+            }
+        }
     }
 }
 
 // do you need a destructor?
 GameMechs::~GameMechs()
 {
-    delete[] border;
+    // Delete each row
+    for(int yCoord=0; yCoord<boardSizeY; yCoord++)
+    {
+        delete[] board[yCoord];
+    }
+
+    // Delete row-lookup table
+    delete[] board;
+
+    // Prevent mis-use of pointer
+    board = NULL;
 }
 
 
@@ -164,75 +184,56 @@ void GameMechs::incrementScore()
     ++score;
 }
 
-bool GameMechs::getBorderPos(int index, objPos &returnPos)
+void GameMechs::printBoard()
 {
-    // Return false if the index is valid
-    // and true if it is valid (also carry out operation if valid)
-    if(index<0 || index>=(2*boardSizeX + 2*(boardSizeY-2))) // less than 0 or >= to the amount of border objects there are
-    {return false;}
 
-    else
+    for(int yCoord=0; yCoord<boardSizeY; yCoord++)
     {
-        returnPos = border[index]; // copy
-        return true;
+        // Each row of the gameboard
+        MacUILib_printf("%s", board[yCoord]);
+
+        // Print the controls for good UI design
+        if(yCoord==0){MacUILib_printf("\tMovement:\tw-UP, a-LEFT, s-DOWN, d-RIGHT");}
+        else if(yCoord==1){MacUILib_printf("\tQuit:\t\tspacebar");}
+
+        MacUILib_printf("\n");
     }
 }
 
-// Is this allowed? Probably not?
-// Is it good game design?
-void GameMechs::printBoard()
+void GameMechs::drawBoard()
 {
-    // temporary
-    int index;
-    char symbol;
-    bool printed;
-    objPos temp1;
-    objPos temp2;
-
-    // Displaying the board
-    for(int y=0; y<(boardSizeY); y++) // loop through y coordinates
+    // Draw default board
+    for(int yCoord=0; yCoord<boardSizeY; yCoord++)
     {
-        for(int x=0; x<(boardSizeX); x++) // for each y coordinate, loop through all x coordinates
+        for(int xCoord=0; xCoord<(boardSizeX+1); xCoord++)
         {
-            // default space tile
-            temp1 = objPos(x, y, ' ');
-
-            // Flag to know when the space has been printed
-            printed = false;
-
-            // border of the game board
-            if(printed == false)
+            // Boarder characters
+            // left side and right sides
+            if(xCoord==0 || xCoord==(boardSizeX-1)) 
             {
-                index = 0;
-                while (getBorderPos(index++, temp2))
-                {
-                    // If the position of the current tile is one that belongs to a border
-                    // get the character
-                    symbol = temp2.getSymbolIfPosEqual(&temp1);
-                    
-                    // If the character is not 0, then they were on a border tile
-                    // print out the border
-                    // If it is 0, then the tiles did not match 
-                    if(symbol != 0)
-                    {
-                        MacUILib_printf("%c", symbol);
-                        printed = true;
-                        break;
-                    }
-                }
+                board[yCoord][xCoord] = '#';
+            }
+            // top and bottom
+            else if((yCoord==0 && xCoord>0 && xCoord<(boardSizeX-1)) || (yCoord==(boardSizeY-1) && xCoord>0 && xCoord<(boardSizeX-1)))
+            {
+                board[yCoord][xCoord] = '#';
             }
 
-            // print the player character
+            // Null character
+            else if(xCoord==boardSizeX)
+            {
+                board[yCoord][xCoord] = '\0';
+            }
 
-            // otherwise, print the default space tile
-            if(printed == false){MacUILib_printf("%c", temp1.getSymbol());}
+            // empty characters
+            else
+            {
+                board[yCoord][xCoord] = ' ';
+            }
         }
-
-        // Print the controls for good UI design
-        if(y==0){MacUILib_printf("\tMovement:\tw-UP, a-LEFT, s-DOWN, d-RIGHT");}
-        else if(y==1){MacUILib_printf("\tQuit:\t\tspacebar");}
-
-        // Next row (y value) prints on a new line
-        MacUILib_printf("\n"); 
     }
+
+
+    // Populate the board
+    // this is where we will insert the player and food characters
 }

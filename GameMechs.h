@@ -29,7 +29,7 @@ class GameMechs
 
         int score;
 
-        objPos* border;
+        char** board;
 
     public:
         GameMechs();
@@ -53,12 +53,8 @@ class GameMechs
         void incrementScore();
 
         // Interesting idea...
-        bool getBorderPos(int index, objPos &returnPos);
-        void printBoard();
-
-        // am I allowed to use a 2D array of characters?
-        // am I allowed to inlcude a pointer to the player in the game mechs
-      
+        void drawBoard();
+        void printBoard();      
 
 };
 

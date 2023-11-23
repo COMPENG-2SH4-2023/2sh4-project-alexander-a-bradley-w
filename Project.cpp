@@ -41,7 +41,7 @@ void Initialize(void)
     MacUILib_init();
     MacUILib_clearScreen();
 
-    Game = new GameMechs(14,7); // On heap
+    Game = new GameMechs(10,5); // On heap
                                 // just using default board size currently
 }
 
@@ -94,6 +94,8 @@ void RunLogic(void)
     // This is where movePlayer() will go
 
     // This is where object collision stuff
+
+    // This is where we check win/lose conditions
 }
 
 void DrawScreen(void)
@@ -101,7 +103,18 @@ void DrawScreen(void)
     MacUILib_clearScreen();    
 
     // Print the gameboard
+    Game->drawBoard();
     Game->printBoard();
+
+    // Print a lose or exit message
+    if(Game->getExitFlagStatus() && Game->getLoseFlagStatus())
+    {
+        MacUILib_printf("\nYou lose!\nScore: %d", Game->getScore());
+    }
+    else if(Game->getExitFlagStatus() && !(Game->getLoseFlagStatus()))
+    {
+        MacUILib_printf("\nQuitting...");
+    }
 
     // Debugging messages go below
 }
