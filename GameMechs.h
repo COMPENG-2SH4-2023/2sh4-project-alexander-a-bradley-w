@@ -31,6 +31,8 @@ class GameMechs
 
         char** board;
 
+        objPos foodPos;
+
     public:
         GameMechs();
         GameMechs(int boardX, int boardY);
@@ -52,9 +54,13 @@ class GameMechs
         int getScore();
         void incrementScore();
 
-        // Interesting idea...
-        void drawBoard();
-        void printBoard();      
+        // For board display I/O
+        void drawBoard(objPos *player);
+        void printBoard();
+
+        // For the food items
+        void generateFood(objPos blockOff);
+        void getFoodPos(objPos &returnPos);      
 
 };
 

@@ -1,5 +1,7 @@
 #include "GameMechs.h"
 #include "MacUILib.h" // added so that we can do print operations in here already
+#include <stdlib.h> // for random
+#include <time.h> // for seeding
 
 GameMechs::GameMechs()
 {
@@ -13,6 +15,7 @@ GameMechs::GameMechs()
 
     score = 0;
 
+    foodPos.setObjPos(0, 0, '\0'); // null since no food
 
     board = new char*[boardSizeY]; // row lookup table
 
@@ -71,6 +74,8 @@ GameMechs::GameMechs(int boardX, int boardY)
     else{boardSizeY = 15;}
 
     score = 0;
+
+    foodPos.setObjPos(0, 0, '\0'); // null since no food
 
     board = new char*[boardSizeY]; // row lookup table
 
@@ -200,13 +205,19 @@ void GameMechs::printBoard()
     }
 }
 
-void GameMechs::drawBoard()
+// will need to change when new player class is implemented
+void GameMechs::drawBoard(objPos *player)
 {
+    char symbol;
+    objPos tempPos;
+
     // Draw default board
     for(int yCoord=0; yCoord<boardSizeY; yCoord++)
     {
         for(int xCoord=0; xCoord<(boardSizeX+1); xCoord++)
         {
+            tempPos.setObjPos(xCoord, yCoord, '\0');
+            
             // Boarder characters
             // left side and right sides
             if(xCoord==0 || xCoord==(boardSizeX-1)) 
@@ -225,6 +236,18 @@ void GameMechs::drawBoard()
                 board[yCoord][xCoord] = '\0';
             }
 
+            // Player
+            else if(symbol = player->getSymbolIfPosEqual(&tempPos))
+            {
+                board[yCoord][xCoord] = symbol;
+            }
+
+            // Food
+            else if(symbol = foodPos.getSymbolIfPosEqual(&tempPos))
+            {
+                board[yCoord][xCoord] = symbol;
+            }
+
             // empty characters
             else
             {
@@ -237,3 +260,34 @@ void GameMechs::drawBoard()
     // Populate the board
     // this is where we will insert the player and food characters
 }
+
+void GameMechs::generateFood(objPos blockOff)
+{
+    int xCoord;
+    int yCoord;
+
+    do{
+        xCoord = (rand() % (boardSizeX-2)) + 1; // values from 1 to boardSizeX-2
+        // Example
+        // boardSizeX = 10
+        // All indexes: 0 1 2 3 4 5 6 7 8 9 (10 for null character '\0')
+        // Valide indexes for position: 1 2 3 4 5 6 7 8 (i.e., not the boarder ones)
+        
+        yCoord = (rand() % (boardSizeY-2)) + 1;
+        // Example
+        // boardSizeY = 5
+        // All indexes: 0 1 2 3 4
+        // Valide indexes for position: 1 2 3 (i.e., not the boarder ones)
+        
+        foodPos.setObjPos(xCoord, yCoord, 'o');
+
+    }while(foodPos.isPosEqual(&blockOff));
+}
+
+// have not tested this yet
+void GameMechs::getFoodPos(objPos &returnPos)
+{
+    returnPos.setObjPos(foodPos.x, foodPos.y, foodPos.symbol);
+}
+
+

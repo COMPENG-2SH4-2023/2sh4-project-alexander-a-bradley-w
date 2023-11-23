@@ -8,6 +8,8 @@ using namespace std;
 #define DELAY_CONST 100000
 
 GameMechs* Game;
+objPos* tempPlayer; // will need to change when new player class is implemented
+
 
 void Initialize(void);
 void GetInput(void);
@@ -41,8 +43,18 @@ void Initialize(void)
     MacUILib_init();
     MacUILib_clearScreen();
 
-    Game = new GameMechs(10,5); // On heap
-                                // just using default board size currently
+    Game = new GameMechs(30,15); // On heap
+
+    // for debugging
+    // will need to change when new player class is implemented
+    tempPlayer = new objPos(5,5,'a');
+
+    // generate a seed for rand
+    srand(time(NULL));
+
+    // Generate food
+    Game->generateFood(*tempPlayer); // will need to change when new player class is implemented
+
 }
 
 void GetInput(void)
@@ -71,7 +83,10 @@ void RunLogic(void)
             case '2':
                 Game->setLoseFlag();
                 break;
-
+            case '3':
+                Game->generateFood(*tempPlayer);
+                break;
+                
             // Movement keys
             case 'w':
             case 'W':
@@ -103,7 +118,8 @@ void DrawScreen(void)
     MacUILib_clearScreen();    
 
     // Print the gameboard
-    Game->drawBoard();
+    Game->drawBoard(tempPlayer); // will need to change when new player class is implemented
+
     Game->printBoard();
 
     // Print a lose or exit message
@@ -130,6 +146,8 @@ void CleanUp(void)
     //MacUILib_clearScreen();    // commented out so that we can see the screen when program ends
     
     delete Game; // delete Game from heap (GameMechs object)
+    delete tempPlayer; // will need to change when new player class is implemented
+
 
     MacUILib_uninit();
 }
