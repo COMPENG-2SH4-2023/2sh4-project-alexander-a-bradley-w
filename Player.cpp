@@ -95,6 +95,19 @@ void Player::updatePlayerDir()
     mainGameMechsRef->clearInput();
 }
 
+bool Player::checkFoodConsumption()
+{
+    // Write the position of the snake head into a temporary playerPos object (type objPos)
+    objPos playerPos;
+    playerPosList->getHeadElement(playerPos);
+
+    // Write the position of a food object into a temporary foodPos object (type objPos)
+    objPos foodPos;
+    mainGameMechsRef->getFoodPos(foodPos);  // Use GameMechs function to get foodPos
+    
+    return playerPos.isPosEqual(&foodPos);
+}
+
 void Player::movePlayer()
 {
     // Write the position of the snake head into a temporary playerPos object (type objPos)
@@ -137,10 +150,14 @@ void Player::movePlayer()
         }
     }
 
+    // After doing all necessary movements, check to see if at this new position, there is food
+    // If there is, increase the snake size at the tail
+
     // Add the head at the new location
     playerPosList->insertHead(playerPos);
 
     // Remove the tail
-    playerPosList->removeTail();
+    if(!checkFoodConsumption()) {playerPosList->removeTail();}
+    else {mainGameMechsRef->generateFood(selfrefer);}
 }
 
