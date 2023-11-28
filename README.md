@@ -10,3 +10,10 @@ Section: [L04]
 MacID: [whiteb19]
 
 StudentID: [400455929]
+
+
+Section: [L01]
+
+MacID: [arruda2]
+
+StudentID: [400452095]

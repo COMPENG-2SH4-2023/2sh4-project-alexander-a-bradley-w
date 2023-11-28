@@ -2,13 +2,15 @@
 #include "MacUILib.h"
 #include "objPos.h"
 #include "GameMechs.h"
+#include "Player.h"
 
 using namespace std;
 
 #define DELAY_CONST 100000
 
 GameMechs* Game;
-objPos* tempPlayer; // will need to change when new player class is implemented
+Player* playerPos;
+
 
 
 void Initialize(void);
@@ -45,15 +47,18 @@ void Initialize(void)
 
     Game = new GameMechs(30,15); // On heap
 
-    // for debugging
-    // will need to change when new player class is implemented
-    tempPlayer = new objPos(5,5,'a');
+    playerPos = new Player(Game);
+    
+    // Create tempPlayerPos of type objPos
+    // Extract position and symbol data from playerPos into tempPlayerPos
+    objPos tempPlayerPos;
+    player->getPlayerPos(tempPlayerPos);
 
     // generate a seed for rand
     srand(time(NULL));
 
     // Generate food
-    Game->generateFood(*tempPlayer); // will need to change when new player class is implemented
+    Game->generateFood(tempPlayerPos); // will need to change when new player class is implemented
 
 }
 
@@ -66,6 +71,11 @@ void GetInput(void)
 
 void RunLogic(void)
 {
+    // Create tempPlayerPos of type objPos
+    // Extract position and symbol data from playerPos into tempPlayerPos
+    objPos tempPlayerPos;
+    player->getPlayerPos(tempPlayerPos);
+    
     // If there is an input, then process it
     if(Game->getInput() != 0)
     {
@@ -84,22 +94,28 @@ void RunLogic(void)
                 Game->setLoseFlag();
                 break;
             case '3':
-                Game->generateFood(*tempPlayer);
+                Game->generateFood(tempPlayerPos);
                 break;
                 
             // Movement keys
             case 'w':
             case 'W':
+                testplayerPos->updatePlayerDir();
+                break;
             case 's':
             case 'S':
+                testplayerPos->updatePlayerDir();
+                break;
             case 'd':
             case 'D':
+                testplayerPos->updatePlayerDir();
+                break;
             case 'a':
             case 'A':
-                // this is where we will updatePlayerDir()
+                testplayerPos->updatePlayerDir();
+            // this is where we will updatePlayerDir()
                 break;
-
-            // Invaid key
+            // Invalid key
             default:
                 break;
         }
@@ -107,6 +123,7 @@ void RunLogic(void)
     }
 
     // This is where movePlayer() will go
+    playerPos->movePlayer();
 
     // This is where object collision stuff
 
@@ -118,9 +135,10 @@ void DrawScreen(void)
     MacUILib_clearScreen();    
 
     // Print the gameboard
-    Game->drawBoard(tempPlayer); // will need to change when new player class is implemented
+    Game->drawBoard(playerPos);
 
     Game->printBoard();
+
 
     // Print a lose or exit message
     if(Game->getExitFlagStatus() && Game->getLoseFlagStatus())
@@ -133,6 +151,7 @@ void DrawScreen(void)
     }
 
     // Debugging messages go below
+
 }
 
 void LoopDelay(void)
@@ -146,8 +165,7 @@ void CleanUp(void)
     //MacUILib_clearScreen();    // commented out so that we can see the screen when program ends
     
     delete Game; // delete Game from heap (GameMechs object)
-    delete tempPlayer; // will need to change when new player class is implemented
-
+    delete playerPos;
 
     MacUILib_uninit();
 }

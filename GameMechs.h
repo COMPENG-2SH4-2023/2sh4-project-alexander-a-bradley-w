@@ -6,6 +6,7 @@
 
 #include "objPos.h"
 #include "objPosArrayList.h"
+#include "Player.h"
 
 using namespace std;
 
@@ -55,7 +56,7 @@ class GameMechs
         void incrementScore();
 
         // For board display I/O
-        void drawBoard(objPos *player);
+        void drawBoard(Player *player);
         void printBoard();
 
         // For the food items

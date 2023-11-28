@@ -206,10 +206,14 @@ void GameMechs::printBoard()
 }
 
 // will need to change when new player class is implemented
-void GameMechs::drawBoard(objPos *player)
+void GameMechs::drawBoard(Player *player)
 {
     char symbol;
     objPos tempPos;
+
+    // Extract playerPos from Player.cpp into tempPlayerPos object
+    objPos tempPlayerPos;
+    player->getPlayerPos(tempPlayerPos);
 
     // Draw default board
     for(int yCoord=0; yCoord<boardSizeY; yCoord++)
@@ -218,7 +222,7 @@ void GameMechs::drawBoard(objPos *player)
         {
             tempPos.setObjPos(xCoord, yCoord, '\0');
             
-            // Boarder characters
+            // Border characters
             // left side and right sides
             if(xCoord==0 || xCoord==(boardSizeX-1)) 
             {
@@ -237,7 +241,7 @@ void GameMechs::drawBoard(objPos *player)
             }
 
             // Player
-            else if(symbol = player->getSymbolIfPosEqual(&tempPos))
+            else if(symbol = tempPlayerPos.getSymbolIfPosEqual(&tempPos))
             {
                 board[yCoord][xCoord] = symbol;
             }
@@ -282,6 +286,8 @@ void GameMechs::generateFood(objPos blockOff)
         foodPos.setObjPos(xCoord, yCoord, 'o');
 
     }while(foodPos.isPosEqual(&blockOff));
+    // Accepts player object
+    // Returns true if player and food have equal coordinates, such that loop keeps running until food is generated at unique position
 }
 
 // have not tested this yet
