@@ -210,10 +210,7 @@ void GameMechs::drawBoard(Player *player)
 {
     char symbol;
     objPos tempPos;
-
-    // Extract playerPos from Player.cpp into tempPlayerPos object
-    objPos tempPlayerPos;
-    player->getPlayerPos(tempPlayerPos);
+    objPosArrayList* playerPosList;
 
     // Draw default board
     for(int yCoord=0; yCoord<boardSizeY; yCoord++)
@@ -240,12 +237,6 @@ void GameMechs::drawBoard(Player *player)
                 board[yCoord][xCoord] = '\0';
             }
 
-            // Player
-            else if(symbol = tempPlayerPos.getSymbolIfPosEqual(&tempPos))
-            {
-                board[yCoord][xCoord] = symbol;
-            }
-
             // Food
             else if(symbol = foodPos.getSymbolIfPosEqual(&tempPos))
             {
@@ -260,17 +251,36 @@ void GameMechs::drawBoard(Player *player)
         }
     }
 
-
     // Populate the board
-    // this is where we will insert the player and food characters
+    
+    // Player
+    // extract the player position list
+    playerPosList = player->getPlayerPos();
+
+    // Loop through the array and add in all the elements
+    for(int index=0; index<(playerPosList->getSize()); index++)
+    {
+        playerPosList->getElement(tempPos,index); // saving the object at the index to a temporary objPos instance
+
+        board[tempPos.y][tempPos.x] = tempPos.symbol;
+    }
+
 }
 
-void GameMechs::generateFood(objPos blockOff)
+void GameMechs::generateFood(Player* player)
 {
     int xCoord;
     int yCoord;
+    bool overlap; // flag for if the generated coordinates overlap the player
+    objPos tempPos;
+    objPosArrayList* playerPosList;
+
+    // extract the player position list
+    playerPosList = player->getPlayerPos();
 
     do{
+        overlap = false; // defaulting to no overlap
+
         xCoord = (rand() % (boardSizeX-2)) + 1; // values from 1 to boardSizeX-2
         // Example
         // boardSizeX = 10
@@ -282,11 +292,27 @@ void GameMechs::generateFood(objPos blockOff)
         // boardSizeY = 5
         // All indexes: 0 1 2 3 4
         // Valide indexes for position: 1 2 3 (i.e., not the boarder ones)
-        
+
+        // Set the food to those coordinates
         foodPos.setObjPos(xCoord, yCoord, 'o');
 
-    }while(foodPos.isPosEqual(&blockOff));
-    // Accepts player object
+        // Checking if overlapping with player
+        // extract the player position list
+        playerPosList = player->getPlayerPos();
+
+        // Loop through the array and add in all the elements
+        for(int index=0; index<(playerPosList->getSize()); index++)
+        {
+            playerPosList->getElement(tempPos,index); // saving the object at the index to a temporary objPos instance
+
+            if(foodPos.isPosEqual(&tempPos)) // if any part of the snake overlaps, flag it
+            {
+                overlap = true;
+                break;
+            } 
+        }
+
+    }while(overlap);
     // Returns true if player and food have equal coordinates, such that loop keeps running until food is generated at unique position
 }
 

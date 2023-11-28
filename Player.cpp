@@ -7,23 +7,46 @@ Player::Player(GameMechs* thisGMRef)
     myDir = STOP;
 
     // more actions to be included
+    // Create the array list for the player
+    playerPosList = new objPosArrayList();
+    
+    // Create a temporary objPos to pass into the insertHead function
+    objPos snakeHead;
+    snakeHead.setObjPos((mainGameMechsRef->getBoardSizeX()-1) / 2, (mainGameMechsRef->getBoardSizeY()-1) / 2, '*');
 
-    playerPos.x = (mainGameMechsRef->getBoardSizeX()-1) / 2;
-    playerPos.y = (mainGameMechsRef->getBoardSizeY()-1) / 2;
-    playerPos.symbol = '*';
+    // Insert the snake head
+    playerPosList->insertHead(snakeHead);
+
+    // TEMPORARY
+    // for testing with 5-length snake
+    snakeHead.y += 1;
+    playerPosList->insertHead(snakeHead);
+
+    snakeHead.y += 1;
+    playerPosList->insertHead(snakeHead);
+
+    snakeHead.y += 1;
+    playerPosList->insertHead(snakeHead);
+
+    snakeHead.y += 1;
+    playerPosList->insertHead(snakeHead);
+
 }
 
 
 Player::~Player()
 {
     // delete any heap members here
+    delete playerPosList;
+
+    // Prevent misuse of pointer
+    playerPosList = NULL;
 }
 
-void Player::getPlayerPos(objPos &returnPos)
+objPosArrayList* Player::getPlayerPos()
 {
     // return the reference to the playerPos arrray list
-
-    returnPos.setObjPos(playerPos);
+    return playerPosList;
 }
 
 void Player::updatePlayerDir()
@@ -89,8 +112,12 @@ void Player::updatePlayerDir()
 
 void Player::movePlayer()
 {
+    // Write the position of the snake head into a temporary playerPos object (type objPos)
+    objPos playerPos;
+    playerPosList->getHeadElement(playerPos);
+    
     // PPA3 Finite State Machine logic
-
+    // Calculating the next position of the snake
     switch(myDir)
     {
         case STOP:
@@ -124,5 +151,11 @@ void Player::movePlayer()
             playerPos.x = (mainGameMechsRef->getBoardSizeX()-2);
         }
     }
+
+    // Add the head at the new location
+    playerPosList->insertHead(playerPos);
+
+    // Remove the tail
+    playerPosList->removeTail();
 }
 

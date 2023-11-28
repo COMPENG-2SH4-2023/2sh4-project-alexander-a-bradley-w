@@ -62,7 +62,7 @@ class GameMechs
         void printBoard();
 
         // For the food items
-        void generateFood(objPos blockOff);
+        void generateFood(Player* player);
         void getFoodPos(objPos &returnPos);      
 
 };

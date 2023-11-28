@@ -49,17 +49,11 @@ void Initialize(void)
 
     playerPos = new Player(Game);
     
-    // Create tempPlayerPos of type objPos
-    // Extract position and symbol data from playerPos into tempPlayerPos
-    objPos tempPlayerPos;
-    playerPos->getPlayerPos(tempPlayerPos);
-
     // generate a seed for rand
     srand(time(NULL));
 
     // Generate food
-    Game->generateFood(tempPlayerPos); // will need to change when new player class is implemented
-
+    Game->generateFood(playerPos); 
 }
 
 void GetInput(void)
@@ -71,11 +65,6 @@ void GetInput(void)
 
 void RunLogic(void)
 {
-    // Create tempPlayerPos of type objPos
-    // Extract position and symbol data from playerPos into tempPlayerPos
-    objPos tempPlayerPos;
-    playerPos->getPlayerPos(tempPlayerPos);
-    
     // If there is an input, then process it
     if(Game->getInput() != 0)
     {
@@ -94,7 +83,7 @@ void RunLogic(void)
                 Game->setLoseFlag();
                 break;
             case '3':
-                Game->generateFood(tempPlayerPos);
+                Game->generateFood(playerPos);
                 break;
                 
             // Movement keys
