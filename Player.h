@@ -1,9 +1,12 @@
 #ifndef PLAYER_H
 #define PLAYER_H
 
-#include "GameMechs.h"
 #include "objPos.h"
 #include "objPosArrayList.h"
+#include "GameMechs.h"
+
+class GameMechs;
+class objPosArrayList;
 
 class Player
 {

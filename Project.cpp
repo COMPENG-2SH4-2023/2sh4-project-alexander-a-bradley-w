@@ -52,7 +52,7 @@ void Initialize(void)
     // Create tempPlayerPos of type objPos
     // Extract position and symbol data from playerPos into tempPlayerPos
     objPos tempPlayerPos;
-    player->getPlayerPos(tempPlayerPos);
+    playerPos->getPlayerPos(tempPlayerPos);
 
     // generate a seed for rand
     srand(time(NULL));
@@ -74,7 +74,7 @@ void RunLogic(void)
     // Create tempPlayerPos of type objPos
     // Extract position and symbol data from playerPos into tempPlayerPos
     objPos tempPlayerPos;
-    player->getPlayerPos(tempPlayerPos);
+    playerPos->getPlayerPos(tempPlayerPos);
     
     // If there is an input, then process it
     if(Game->getInput() != 0)
@@ -100,19 +100,19 @@ void RunLogic(void)
             // Movement keys
             case 'w':
             case 'W':
-                testplayerPos->updatePlayerDir();
+                playerPos->updatePlayerDir();
                 break;
             case 's':
             case 'S':
-                testplayerPos->updatePlayerDir();
+                playerPos->updatePlayerDir();
                 break;
             case 'd':
             case 'D':
-                testplayerPos->updatePlayerDir();
+                playerPos->updatePlayerDir();
                 break;
             case 'a':
             case 'A':
-                testplayerPos->updatePlayerDir();
+                playerPos->updatePlayerDir();
             // this is where we will updatePlayerDir()
                 break;
             // Invalid key

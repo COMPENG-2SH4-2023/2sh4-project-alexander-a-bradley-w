@@ -96,16 +96,16 @@ void Player::movePlayer()
         case STOP:
             break;
         case LEFT:
-            playerPos.y--;
-            break;
-        case RIGHT:
-            playerPos.y++;
-            break;
-        case UP:
             playerPos.x--;
             break;
-        case DOWN:
+        case RIGHT:
             playerPos.x++;
+            break;
+        case UP:
+            playerPos.y--;
+            break;
+        case DOWN:
+            playerPos.y++;
             break;
         default:
             break;
