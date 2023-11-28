@@ -316,7 +316,6 @@ void GameMechs::generateFood(Player* player)
     // Returns true if player and food have equal coordinates, such that loop keeps running until food is generated at unique position
 }
 
-// have not tested this yet
 void GameMechs::getFoodPos(objPos &returnPos)
 {
     returnPos.setObjPos(foodPos.x, foodPos.y, foodPos.symbol);

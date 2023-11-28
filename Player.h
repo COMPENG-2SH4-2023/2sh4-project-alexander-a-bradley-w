@@ -24,7 +24,7 @@ class Player
 
         objPosArrayList* getPlayerPos(); // Upgrade this in iteration 3.
         void updatePlayerDir();
-        void movePlayer();
+        bool movePlayer();
         bool checkFoodConsumption();
 
     private:
@@ -33,7 +33,6 @@ class Player
 
         // Need a reference to the Main Game Mechanisms
         GameMechs* mainGameMechsRef;
-        Player *selfrefer;  // Pointer to reference to the current instance of Player (needed for generateFood() usage in movePlayer())
 };
 
 #endif

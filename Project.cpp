@@ -112,7 +112,10 @@ void RunLogic(void)
     }
 
     // This is where movePlayer() will go
-    playerPos->movePlayer();
+    if(playerPos->movePlayer())
+    {
+        Game->generateFood(playerPos);
+    }
 
     // This is where object collision stuff
 

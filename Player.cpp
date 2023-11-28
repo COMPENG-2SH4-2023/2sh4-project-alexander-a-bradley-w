@@ -108,7 +108,7 @@ bool Player::checkFoodConsumption()
     return playerPos.isPosEqual(&foodPos);
 }
 
-void Player::movePlayer()
+bool Player::movePlayer()
 {
     // Write the position of the snake head into a temporary playerPos object (type objPos)
     objPos playerPos;
@@ -150,14 +150,23 @@ void Player::movePlayer()
         }
     }
 
-    // After doing all necessary movements, check to see if at this new position, there is food
-    // If there is, increase the snake size at the tail
-
     // Add the head at the new location
     playerPosList->insertHead(playerPos);
 
     // Remove the tail
     if(!checkFoodConsumption()) {playerPosList->removeTail();}
-    else {mainGameMechsRef->generateFood(selfrefer);}
+    else
+    {
+        // Tail "added" by not removing tail during movement
+        
+        // Now, generate new food!
+        // We do this by returning true and generating in the main function (Project.cpp)
+
+        return true;
+        
+    }
+    
+    return false;
+    
 }
 
