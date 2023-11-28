@@ -115,6 +115,7 @@ void RunLogic(void)
     if(playerPos->movePlayer())
     {
         Game->generateFood(playerPos);
+        Game->incrementScore();
     }
 
     // This is where object collision stuff
