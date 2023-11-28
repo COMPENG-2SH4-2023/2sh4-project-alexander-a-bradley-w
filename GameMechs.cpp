@@ -13,7 +13,7 @@ GameMechs::GameMechs()
     boardSizeX = 30; // default board size
     boardSizeY = 15;
 
-    score = 0;
+    score = 1;
 
     foodPos.setObjPos(0, 0, '\0'); // null since no food
 
@@ -73,7 +73,7 @@ GameMechs::GameMechs(int boardX, int boardY)
     if(boardY>=5){boardSizeY = boardY;}
     else{boardSizeY = 15;}
 
-    score = 0;
+    score = 1;
 
     foodPos.setObjPos(0, 0, '\0'); // null since no food
 
