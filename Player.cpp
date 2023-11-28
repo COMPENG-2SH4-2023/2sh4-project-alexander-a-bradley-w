@@ -16,21 +16,6 @@ Player::Player(GameMechs* thisGMRef)
 
     // Insert the snake head
     playerPosList->insertHead(snakeHead);
-
-    // TEMPORARY
-    // for testing with 5-length snake
-    snakeHead.y += 1;
-    playerPosList->insertHead(snakeHead);
-
-    snakeHead.y += 1;
-    playerPosList->insertHead(snakeHead);
-
-    snakeHead.y += 1;
-    playerPosList->insertHead(snakeHead);
-
-    snakeHead.y += 1;
-    playerPosList->insertHead(snakeHead);
-
 }
 
 
