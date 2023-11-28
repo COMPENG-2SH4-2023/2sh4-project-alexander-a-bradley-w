@@ -5,6 +5,8 @@
 #include "objPosArrayList.h"
 #include "GameMechs.h"
 
+class GameMechs;
+class objPosArrayList;
 
 class Player
 {

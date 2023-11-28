@@ -10,6 +10,8 @@
 
 using namespace std;
 
+class Player;
+class objPosArrayList;
 
 class GameMechs
 {
