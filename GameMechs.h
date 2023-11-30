@@ -7,11 +7,13 @@
 #include "objPos.h"
 #include "objPosArrayList.h"
 #include "Player.h"
+#include "Food.h"
 
 using namespace std;
 
 class Player;
 class objPosArrayList;
+class Food;
 
 class GameMechs
 {
@@ -33,8 +35,6 @@ class GameMechs
         int score;
 
         char** board;
-
-        objPos foodPos;
 
     public:
         GameMechs();
@@ -58,13 +58,10 @@ class GameMechs
         void incrementScore();
 
         // For board display I/O
-        void drawBoard(Player *player);
+        void drawBoard(Player *player, Food *food);
         void printBoard();
         void endGameMessage();
 
-        // For the food items
-        void generateFood(Player* player);
-        void getFoodPos(objPos &returnPos);
 };
 
 #endif

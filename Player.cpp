@@ -95,7 +95,7 @@ void Player::updatePlayerDir()
     mainGameMechsRef->clearInput();
 }
 
-bool Player::checkFoodConsumption()
+bool Player::checkFoodConsumption(Food* food)
 {
     // Write the position of the snake head into a temporary playerPos object (type objPos)
     objPos playerPos;
@@ -103,7 +103,7 @@ bool Player::checkFoodConsumption()
 
     // Write the position of a food object into a temporary foodPos object (type objPos)
     objPos foodPos;
-    mainGameMechsRef->getFoodPos(foodPos);  // Use GameMechs function to get foodPos
+    food->getFoodPos(foodPos);  // Use GameMechs function to get foodPos
     
     return playerPos.isPosEqual(&foodPos);
 }
@@ -144,7 +144,7 @@ bool Player::checkSelfCollision()
     return false;
 }
 
-void Player::movePlayer()
+void Player::movePlayer(Food* food)
 {
     // Write the position of the snake head into a temporary playerPos object (type objPos)
     objPos playerPos;
@@ -195,7 +195,7 @@ void Player::movePlayer()
     // Check food collision
     // If yes, dont remove tail to essentially "add" a tail
     // Also, generate a new food and increment the score
-    if(!checkFoodConsumption()) {playerPosList->removeTail();}
+    if(!checkFoodConsumption(food)) {playerPosList->removeTail();}
     else
     {
         // Tail "added" by not removing tail during movement
@@ -203,7 +203,8 @@ void Player::movePlayer()
         mainGameMechsRef->incrementScore();
 
         // Now, generate new food!
-        mainGameMechsRef->generateFood(this); // note: this is a pointer to an instance of an object itself (i.e., like self in python, but a pointer)
+        food->generateFood(); // note: this is a pointer to an instance of an object itself (i.e., like self in python, but a pointer)
+        // initially had 'this' as a parameter
     }
 
     // Endgame condition: Snake suicide

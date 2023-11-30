@@ -3,6 +3,7 @@
 #include "objPos.h"
 #include "GameMechs.h"
 #include "Player.h"
+#include "Food.h"
 
 using namespace std;
 
@@ -10,6 +11,7 @@ using namespace std;
 
 GameMechs* Game;
 Player* playerPos;
+Food* foodBin;
 
 
 
@@ -48,9 +50,12 @@ void Initialize(void)
     Game = new GameMechs(30,15); // On heap
 
     playerPos = new Player(Game);
-    
+
+    foodBin = new Food(playerPos, Game);
+
     // Generate food
-    Game->generateFood(playerPos); 
+    foodBin->generateFood(); 
+    // Initially had playerPos as a parameter       DELETE THIS COMMENT
 }
 
 void GetInput(void)
@@ -106,7 +111,7 @@ void RunLogic(void)
     // Moving the player based on updated movement directions
     // And performing any actions associated with collisions caused by the movement
     // like consuming food, or self-collision
-    playerPos->movePlayer();
+    playerPos->movePlayer(foodBin);
 }
 
 void DrawScreen(void)
@@ -114,7 +119,7 @@ void DrawScreen(void)
     MacUILib_clearScreen();    
 
     // Print the gameboard
-    Game->drawBoard(playerPos); // update the board with most recent player and food data
+    Game->drawBoard(playerPos, foodBin); // update the board with most recent player and food data
     Game->printBoard();
 
     // Print a lose or exit message
@@ -143,6 +148,7 @@ void CleanUp(void)
     
     delete Game; // delete Game from heap (GameMechs object)
     delete playerPos;
+    delete foodBin;
 
     MacUILib_uninit();
 }

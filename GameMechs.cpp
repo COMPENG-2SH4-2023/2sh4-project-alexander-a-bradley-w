@@ -15,9 +15,6 @@ GameMechs::GameMechs()
 
     score = 1; // Initializes to 1, since snake starts with length 1
 
-    // Initializing with no food 
-    foodPos.setObjPos(0, 0, '\0'); // null since no food
-
     // generate a seed for the game
     srand(time(NULL));
 
@@ -82,8 +79,6 @@ GameMechs::GameMechs(int boardX, int boardY)
 
     score = 1; // Initializes to 1, since snake starts with length 1
 
-    // Initializing with no food 
-    foodPos.setObjPos(0, 0, '\0'); // null since no food
     
     // generate a seed for the game
     srand(time(NULL));
@@ -130,7 +125,6 @@ GameMechs::GameMechs(int boardX, int boardY)
     }
 }
 
-// do you need a destructor?
 GameMechs::~GameMechs()
 {
     // Delete each row
@@ -221,11 +215,13 @@ void GameMechs::printBoard()
 }
 
 // will need to change when new player class is implemented
-void GameMechs::drawBoard(Player *player)
+void GameMechs::drawBoard(Player *player, Food *food)
 {
     char symbol;
     objPos tempPos;
+    objPos foodTempPos;
     objPosArrayList* playerPosList;
+    food->getFoodPos(foodTempPos);
 
     // Draw default board
     for(int yCoord=0; yCoord<boardSizeY; yCoord++)
@@ -253,7 +249,7 @@ void GameMechs::drawBoard(Player *player)
             }
 
             // Food
-            else if(symbol = foodPos.getSymbolIfPosEqual(&tempPos))
+            else if(symbol = foodTempPos.getSymbolIfPosEqual(&tempPos))
             {
                 board[yCoord][xCoord] = symbol;
             }
@@ -280,58 +276,4 @@ void GameMechs::drawBoard(Player *player)
         board[tempPos.y][tempPos.x] = tempPos.symbol;
     }
 
-}
-
-void GameMechs::generateFood(Player* player)
-{
-    int xCoord;
-    int yCoord;
-    bool overlap; // flag for if the generated coordinates overlap the player
-    objPos tempPos;
-    objPosArrayList* playerPosList;
-
-    // extract the player position list
-    playerPosList = player->getPlayerPos();
-
-    do{
-        overlap = false; // defaulting to no overlap
-
-        xCoord = (rand() % (boardSizeX-2)) + 1; // values from 1 to boardSizeX-2
-        // Example
-        // boardSizeX = 10
-        // All indexes: 0 1 2 3 4 5 6 7 8 9 (10 for null character '\0')
-        // Valide indexes for position: 1 2 3 4 5 6 7 8 (i.e., not the boarder ones)
-        
-        yCoord = (rand() % (boardSizeY-2)) + 1;
-        // Example
-        // boardSizeY = 5
-        // All indexes: 0 1 2 3 4
-        // Valide indexes for position: 1 2 3 (i.e., not the boarder ones)
-
-        // Set the food to those coordinates
-        foodPos.setObjPos(xCoord, yCoord, 'o');
-
-        // Checking if overlapping with player
-        // extract the player position list
-        playerPosList = player->getPlayerPos();
-
-        // Loop through the array and add in all the elements
-        for(int index=0; index<(playerPosList->getSize()); index++)
-        {
-            playerPosList->getElement(tempPos,index); // saving the object at the index to a temporary objPos instance
-
-            if(foodPos.isPosEqual(&tempPos)) // if any part of the snake overlaps, flag it
-            {
-                overlap = true;
-                break;
-            } 
-        }
-
-    }while(overlap);
-    // Returns true if player and food have equal coordinates, such that loop keeps running until food is generated at unique position
-}
-
-void GameMechs::getFoodPos(objPos &returnPos)
-{
-    returnPos.setObjPos(foodPos.x, foodPos.y, foodPos.symbol);
 }
