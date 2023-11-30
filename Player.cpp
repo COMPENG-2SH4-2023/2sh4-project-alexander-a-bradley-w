@@ -108,7 +108,43 @@ bool Player::checkFoodConsumption()
     return playerPos.isPosEqual(&foodPos);
 }
 
-bool Player::movePlayer()
+bool Player::checkSelfCollision()
+{
+    // Note: the tail
+    // If the snake less than 5 tiles long there is no need to check this
+    if((playerPosList->getSize())<5)
+    {
+        return false; // no collision is possible if the snake is 4 tiles or less
+        // doing this for efficiency
+    }
+
+    // Write the position of the snake head into a temporary playerPos object (type objPos)
+    objPos playerPos;
+    playerPosList->getHeadElement(playerPos);
+
+    // Temporary object for each player body
+    objPos playerBody;
+
+    // Loop through all the tiles of the snake body AFTER the head
+    // Note: the 5th element (index 4) is the first element that can have a collision with the head
+    // Once again, not using index 1 for efficiency sake
+    for(int index=4; index<(playerPosList->getSize()); index++)
+    {
+        // Extract the player body
+        playerPosList->getElement(playerBody, index);
+
+        // Check if it overlaps with the head
+        if(playerPos.isPosEqual(&playerBody))
+        {
+            return true; // if it does overlap, return true (exits function)
+        }
+    }
+
+    // if none of the body pieces overlapped, return false
+    return false;
+}
+
+void Player::movePlayer()
 {
     // Write the position of the snake head into a temporary playerPos object (type objPos)
     objPos playerPos;
@@ -116,6 +152,7 @@ bool Player::movePlayer()
     
     // PPA3 Finite State Machine logic
     // Calculating the next position of the snake
+    // Incrementing in current direction
     switch(myDir)
     {
         case STOP:
@@ -136,6 +173,7 @@ bool Player::movePlayer()
             break;
     }
 
+    // Wrap-around
     if( playerPos.y == (mainGameMechsRef->getBoardSizeY()-1)  || playerPos.y == 0 ){
         if( playerPos.y == (mainGameMechsRef->getBoardSizeY()-1) ){
             playerPos.y = 1;
@@ -153,20 +191,31 @@ bool Player::movePlayer()
     // Add the head at the new location
     playerPosList->insertHead(playerPos);
 
-    // Remove the tail
+    // For the tail: need to know if there was food that was consumed
+    // Check food collision
+    // If yes, dont remove tail to essentially "add" a tail
+    // Also, generate a new food and increment the score
     if(!checkFoodConsumption()) {playerPosList->removeTail();}
     else
     {
         // Tail "added" by not removing tail during movement
-        
-        // Now, generate new food!
-        // We do this by returning true and generating in the main function (Project.cpp)
+        // And score will be incremented (tracking score seperately from length for above and beyond features)
+        mainGameMechsRef->incrementScore();
 
-        return true;
-        
+        // Now, generate new food!
+        mainGameMechsRef->generateFood(this); // note: this is a pointer to an instance of an object itself (i.e., like self in python, but a pointer)
     }
-    
-    return false;
-    
+
+    // Endgame condition: Snake suicide
+    // Note: both the food and the self collision cant happen at the same time, so this is all OK
+    if(checkSelfCollision()) 
+    {
+        // Set exit and lose flags to true to quit the game
+        mainGameMechsRef->setLoseFlag();
+        mainGameMechsRef->setExitTrue();
+        
+        return;
+    }
+
 }
 

@@ -13,10 +13,17 @@ GameMechs::GameMechs()
     boardSizeX = 30; // default board size
     boardSizeY = 15;
 
-    score = 1;
+    score = 1; // Initializes to 1, since snake starts with length 1
 
+    // Initializing with no food 
     foodPos.setObjPos(0, 0, '\0'); // null since no food
 
+    // generate a seed for the game
+    srand(time(NULL));
+
+    // Creating a 2D char array to contain the board to print
+    // (to simplify printing)
+    // BUT not the up-to-date positions of objects on the board
     board = new char*[boardSizeY]; // row lookup table
 
     for(int index=0; index<boardSizeY; index++) 
@@ -73,10 +80,17 @@ GameMechs::GameMechs(int boardX, int boardY)
     if(boardY>=5){boardSizeY = boardY;}
     else{boardSizeY = 15;}
 
-    score = 1;
+    score = 1; // Initializes to 1, since snake starts with length 1
 
+    // Initializing with no food 
     foodPos.setObjPos(0, 0, '\0'); // null since no food
+    
+    // generate a seed for the game
+    srand(time(NULL));
 
+    // Creating a 2D char array to contain the board to print
+    // (to simplify printing)
+    // BUT not the up-to-date positions of objects on the board
     board = new char*[boardSizeY]; // row lookup table
 
     for(int index=0; index<boardSizeY; index++) 
@@ -321,5 +335,3 @@ void GameMechs::getFoodPos(objPos &returnPos)
 {
     returnPos.setObjPos(foodPos.x, foodPos.y, foodPos.symbol);
 }
-
-

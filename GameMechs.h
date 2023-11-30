@@ -60,11 +60,11 @@ class GameMechs
         // For board display I/O
         void drawBoard(Player *player);
         void printBoard();
+        void endGameMessage();
 
         // For the food items
         void generateFood(Player* player);
-        void getFoodPos(objPos &returnPos);      
-
+        void getFoodPos(objPos &returnPos);
 };
 
 #endif

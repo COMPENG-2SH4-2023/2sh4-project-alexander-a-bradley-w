@@ -49,9 +49,6 @@ void Initialize(void)
 
     playerPos = new Player(Game);
     
-    // generate a seed for rand
-    srand(time(NULL));
-
     // Generate food
     Game->generateFood(playerPos); 
 }
@@ -76,14 +73,8 @@ void RunLogic(void)
                 break;
             
             // Debug keys
-            case '1':
-                Game->incrementScore();
-                break;
             case '2':
                 Game->setLoseFlag();
-                break;
-            case '3':
-                Game->generateFood(playerPos);
                 break;
                 
             // Movement keys
@@ -102,8 +93,8 @@ void RunLogic(void)
             case 'a':
             case 'A':
                 playerPos->updatePlayerDir();
-            // this is where we will updatePlayerDir()
                 break;
+            
             // Invalid key
             default:
                 break;
@@ -111,16 +102,11 @@ void RunLogic(void)
         Game->clearInput(); // reset the input once processed
     }
 
-    // This is where movePlayer() will go
-    if(playerPos->movePlayer())
-    {
-        Game->generateFood(playerPos);
-        Game->incrementScore();
-    }
-
-    // This is where object collision stuff
-
-    // This is where we check win/lose conditions
+    
+    // Moving the player based on updated movement directions
+    // And performing any actions associated with collisions caused by the movement
+    // like consuming food, or self-collision
+    playerPos->movePlayer();
 }
 
 void DrawScreen(void)
@@ -128,15 +114,13 @@ void DrawScreen(void)
     MacUILib_clearScreen();    
 
     // Print the gameboard
-    Game->drawBoard(playerPos);
-
+    Game->drawBoard(playerPos); // update the board with most recent player and food data
     Game->printBoard();
-
 
     // Print a lose or exit message
     if(Game->getExitFlagStatus() && Game->getLoseFlagStatus())
     {
-        MacUILib_printf("\nYou lose!\nScore: %d", Game->getScore());
+        MacUILib_printf("\nGame Over!\nScore: %d", Game->getScore());
     }
     else if(Game->getExitFlagStatus() && !(Game->getLoseFlagStatus()))
     {
