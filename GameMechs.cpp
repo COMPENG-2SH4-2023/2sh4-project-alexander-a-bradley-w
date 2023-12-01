@@ -214,14 +214,12 @@ void GameMechs::printBoard()
     }
 }
 
-// will need to change when new player class is implemented
 void GameMechs::drawBoard(Player *player, Food *food)
 {
     char symbol;
     objPos tempPos;
-    objPos foodTempPos;
+    objPosArrayList* foodPosList;
     objPosArrayList* playerPosList;
-    food->getFoodPos(foodTempPos);
 
     // Draw default board
     for(int yCoord=0; yCoord<boardSizeY; yCoord++)
@@ -248,12 +246,6 @@ void GameMechs::drawBoard(Player *player, Food *food)
                 board[yCoord][xCoord] = '\0';
             }
 
-            // Food
-            else if(symbol = foodTempPos.getSymbolIfPosEqual(&tempPos))
-            {
-                board[yCoord][xCoord] = symbol;
-            }
-
             // empty characters
             else
             {
@@ -276,4 +268,15 @@ void GameMechs::drawBoard(Player *player, Food *food)
         board[tempPos.y][tempPos.x] = tempPos.symbol;
     }
 
+    // Food
+    // extracting the list of food
+    foodPosList = food->getFoodPos();
+
+    // Loop through the array and add in all the elements
+    for(int index=0; index<(foodPosList->getSize()); index++)
+    {
+        foodPosList->getElement(tempPos,index); // saving the object at the index to a temporary objPos instance
+
+        board[tempPos.y][tempPos.x] = tempPos.symbol;
+    }
 }

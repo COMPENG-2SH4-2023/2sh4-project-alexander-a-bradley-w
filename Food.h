@@ -14,18 +14,21 @@ class Food
 {
     public:
         void generateFood();
-        void getFoodPos(objPos &returnPos);
+        objPosArrayList* getFoodPos();
         
         Food();
         ~Food();
-        Food(Player* player, GameMechs* GM);
+        Food(Player* player, GameMechs* GM, int num);
 
+        // Getter
+        int getAmountToGenerate();
 
     private:
-        objPos foodPos;
+        objPosArrayList* foodBucket;
 
         Player* myPlayer;
         GameMechs* myGM;
+        int amountToGenerate;
 
 };
 

@@ -101,11 +101,28 @@ bool Player::checkFoodConsumption(Food* food)
     objPos playerPos;
     playerPosList->getHeadElement(playerPos);
 
-    // Write the position of a food object into a temporary foodPos object (type objPos)
-    objPos foodPos;
-    food->getFoodPos(foodPos);  // Use GameMechs function to get foodPos
+    // Get the array of food objects
+    objPosArrayList* foodBin;
+    foodBin = food->getFoodPos();
     
-    return playerPos.isPosEqual(&foodPos);
+    // Temp object for each food
+    objPos foodItem;
+
+    // Check for collision to all food items in bin
+    for(int index=0; index<(foodBin->getSize()); index++)
+    {
+        // Extract the food item
+        foodBin->getElement(foodItem, index);
+
+        // Check if it overlaps with the head
+        if(foodItem.isPosEqual(&playerPos))
+        {
+            return true; // if it does overlap, return true (exits function)
+        }
+    }
+
+    // if none of the body pieces overlapped, return false
+    return false;
 }
 
 bool Player::checkSelfCollision()
@@ -203,7 +220,7 @@ void Player::movePlayer(Food* food)
         mainGameMechsRef->incrementScore();
 
         // Now, generate new food!
-        food->generateFood(); // note: this is a pointer to an instance of an object itself (i.e., like self in python, but a pointer)
+        food->generateFood(); // generate new food items
         // initially had 'this' as a parameter
     }
 

@@ -51,7 +51,7 @@ void Initialize(void)
 
     playerPos = new Player(Game);
 
-    foodBin = new Food(playerPos, Game);
+    foodBin = new Food(playerPos, Game, 5); // food bin for 5 items
 
     // Generate food
     foodBin->generateFood(); 
