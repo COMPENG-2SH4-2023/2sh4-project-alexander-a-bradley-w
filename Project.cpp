@@ -77,26 +77,13 @@ void RunLogic(void)
                 Game->setExitTrue();
                 break;
             
-            // Debug keys
-            case '2':
-                Game->setLoseFlag();
-                break;
-            case '*':
-                playerPos->turnAround();
-                break;
             // Movement keys
             case 'w':
             case 'W':
-                playerPos->updatePlayerDir();
-                break;
             case 's':
             case 'S':
-                playerPos->updatePlayerDir();
-                break;
             case 'd':
             case 'D':
-                playerPos->updatePlayerDir();
-                break;
             case 'a':
             case 'A':
                 playerPos->updatePlayerDir();

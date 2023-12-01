@@ -206,9 +206,12 @@ void GameMechs::printBoard()
         MacUILib_printf("%s", board[yCoord]);
 
         // Print the controls for good UI design
-        if(yCoord==0){MacUILib_printf("\tMovement:\tw-UP, a-LEFT, s-DOWN, d-RIGHT");}
-        else if(yCoord==1){MacUILib_printf("\tQuit:\t\tspacebar");}
-        else if(yCoord==2){MacUILib_printf("\tScore:\t\t%d",score);}
+        if(yCoord==0){MacUILib_printf("\tControls:\tw-UP, a-LEFT, s-DOWN, d-RIGHT, spacebar-QUIT");}
+        else if(yCoord==1){MacUILib_printf("\tScore:\t\t%d",score);}
+        else if(yCoord==3){MacUILib_printf("\t\t o\t\t  B");}
+        else if(yCoord==4){MacUILib_printf("\t     +1 Score     Bounce, +2 Score");}
+
+
 
         MacUILib_printf("\n");
     }

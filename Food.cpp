@@ -31,6 +31,8 @@ void Food::generateFood()
 {
     int xCoord;
     int yCoord;
+    int specialAmount;  // amount of special food present in bucket
+    char ingredient; // symbol of food
     bool overlap; // flag for if the generated coordinates overlap the player
     objPos tempPos; // for comparison
     objPos tempPos2; // for proposed coordinates
@@ -44,6 +46,9 @@ void Food::generateFood()
     {
         foodBucket->removeTail();
     }
+
+    // Generate a random number between 1 and 2 (index 0 and 1) to be a special food in the bucket
+    specialAmount = (rand() % 3)-1;
 
     // generate number food items
     for(int i=0; i<amountToGenerate; i++)
@@ -64,8 +69,12 @@ void Food::generateFood()
             // All indexes: 0 1 2 3 4
             // Valide indexes for position: 1 2 3 (i.e., not the border ones)
 
+            // Insert specialAmount number of special foods
+            if(i <= specialAmount) {ingredient = 'B';}   // Our bonus food symbol
+            else {ingredient = 'o';}
+            
             // Set the food to those coordinates
-            tempPos2.setObjPos(xCoord, yCoord, 'o');
+            tempPos2.setObjPos(xCoord, yCoord, ingredient);
 
             // Loop through the array and add in all the elements
             for(int index=0; index<(playerPosList->getSize()); index++)

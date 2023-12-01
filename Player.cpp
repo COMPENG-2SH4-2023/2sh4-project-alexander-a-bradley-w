@@ -95,7 +95,7 @@ void Player::updatePlayerDir()
     mainGameMechsRef->clearInput();
 }
 
-bool Player::checkFoodConsumption(Food* food)
+bool Player::checkFoodConsumption(Food* food, char &foodType)
 {
     // Write the position of the snake head into a temporary playerPos object (type objPos)
     objPos playerPos;
@@ -117,6 +117,7 @@ bool Player::checkFoodConsumption(Food* food)
         // Check if it overlaps with the head
         if(foodItem.isPosEqual(&playerPos))
         {
+            foodType = foodItem.symbol;
             return true; // if it does overlap, return true (exits function)
         }
     }
@@ -166,6 +167,7 @@ void Player::movePlayer(Food* food)
     // Write the position of the snake head into a temporary playerPos object (type objPos)
     objPos playerPos;
     playerPosList->getHeadElement(playerPos);
+    char foodType;
     
     // PPA3 Finite State Machine logic
     // Calculating the next position of the snake
@@ -212,9 +214,16 @@ void Player::movePlayer(Food* food)
     // Check food collision
     // If yes, dont remove tail to essentially "add" a tail
     // Also, generate a new food and increment the score
-    if(!checkFoodConsumption(food)) {playerPosList->removeTail();}
+    if(!checkFoodConsumption(food, foodType)) {playerPosList->removeTail();}
     else
     {
+        // Add bonus condition if the food collected is the bonus food
+        if(foodType == 'B')
+        {
+            turnAround();
+            mainGameMechsRef->incrementScore(); // This thus increments the score by 2 when B is picked up (score is incremented again after this if statement)
+        }
+        
         // Tail "added" by not removing tail during movement
         // And score will be incremented (tracking score seperately from length for above and beyond features)
         mainGameMechsRef->incrementScore();
