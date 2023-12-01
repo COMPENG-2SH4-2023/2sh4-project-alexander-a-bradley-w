@@ -122,3 +122,18 @@ void objPosArrayList::getElement(objPos &returnPos, int index)
     // Set the returnPos to have the same parameters as the object at position index in the list
     returnPos.setObjPos(aList[index]);
 }
+
+void objPosArrayList::reverseList()
+{
+    objPos tempPos;
+    for(int i = 0; i < sizeList/2; i++)
+    {
+        // We want to swap as follows:
+        // 0 1 2 3 4 5
+        // 5 4 3 2 1 0
+        // We will thus use the standard swapping procedure for indexes i and (sizeList-1)-i
+        tempPos = aList[i];
+        aList[i] = aList[(sizeList-1)-i];
+        aList[(sizeList-1)-i] = tempPos;
+    }
+}

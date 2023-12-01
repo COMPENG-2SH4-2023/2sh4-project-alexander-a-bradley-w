@@ -81,7 +81,9 @@ void RunLogic(void)
             case '2':
                 Game->setLoseFlag();
                 break;
-                
+            case '*':
+                playerPos->turnAround();
+                break;
             // Movement keys
             case 'w':
             case 'W':

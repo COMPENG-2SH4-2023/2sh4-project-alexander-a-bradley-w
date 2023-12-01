@@ -237,3 +237,52 @@ void Player::movePlayer(Food* food)
 
 }
 
+void Player::turnAround() // Temporary for testing
+{
+    objPos tempPos;
+    
+    // x and y coordinates of tail and piece-before-tail, where x2 and y2 are the tail's coordinates
+    playerPosList->getElement(tempPos, playerPosList->getSize()-2); // Extract data of second-to-last element into tempPos, assign to x and y
+    int x1 = tempPos.x;  
+    int y1 = tempPos.y;
+
+    playerPosList->getTailElement(tempPos); // Extract data of tail into tempPos, assign to x and y
+    int x2 = tempPos.x;
+    int y2 = tempPos.y; 
+    
+    if(playerPosList->getSize() <= 1)
+    {
+        // If the snake is only one in length, reverse direction
+        // Given current direction, turn around
+        switch(myDir)
+        {
+            case LEFT:
+                myDir = RIGHT;
+                break;
+            case RIGHT:
+                myDir = LEFT;
+                break;
+            case UP:
+                myDir = DOWN;
+                break;
+            case DOWN:
+                myDir = UP;
+                break;
+            default:
+                break;
+        }
+    }
+    
+    else
+    {
+        if(y1 > y2) {myDir = UP;}           // If next direction of tail is down, make it go up
+        else if (y2 > y1) {myDir = DOWN;}   // If next direction of tail is up, make it go down
+        else if (x1 > x2) {myDir = LEFT;}   // If next direction of tail is right, make it go left
+        else if (x2 > x1) {myDir = RIGHT;}  // If next direction of tail is left, make it go right
+        playerPosList->reverseList();
+    }
+    
+
+
+}
+

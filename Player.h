@@ -29,6 +29,7 @@ class Player
         void movePlayer(Food* food);
         bool checkFoodConsumption(Food* food);
         bool checkSelfCollision();
+        void turnAround();
 
     private:
         objPosArrayList* playerPosList;   // Upgrade this in iteration 3.       
