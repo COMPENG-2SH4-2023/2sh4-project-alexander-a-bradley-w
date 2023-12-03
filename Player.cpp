@@ -6,12 +6,13 @@ Player::Player(GameMechs* thisGMRef)
     mainGameMechsRef = thisGMRef;
     myDir = STOP;
 
-    // more actions to be included
     // Create the array list for the player
     playerPosList = new objPosArrayList();
     
     // Create a temporary objPos to pass into the insertHead function
     objPos snakeHead;
+
+    // At the temporary objPos, set the coordinates to be the middle of the board and the symbol to be '*'
     snakeHead.setObjPos((mainGameMechsRef->getBoardSizeX()-1) / 2, (mainGameMechsRef->getBoardSizeY()-1) / 2, '*');
 
     // Insert the snake head
@@ -40,6 +41,7 @@ void Player::updatePlayerDir()
 
     char input = mainGameMechsRef->getInput();
 
+    // Based on current directions, defines allowed inputs, and what those inputs will do (which directions they will change)
     switch(myDir)
     {
         case STOP:
@@ -49,13 +51,14 @@ void Player::updatePlayerDir()
             else if(input == 'S' || input == 's'){
                 myDir = DOWN;
             }
-            if(input == 'A' || input == 'a'){
+            else if(input == 'A' || input == 'a'){
                 myDir = LEFT;
             }
             else if(input == 'D' || input == 'd'){
                 myDir = RIGHT;
             }
             break;
+        
         case LEFT:
             if(input == 'W' || input == 'w'){
                 myDir = UP;
@@ -64,6 +67,7 @@ void Player::updatePlayerDir()
                 myDir = DOWN;
             }
             break;
+        
         case RIGHT:
             if(input == 'W' || input == 'w'){
                 myDir = UP;
@@ -72,6 +76,7 @@ void Player::updatePlayerDir()
                 myDir = DOWN;
             }
             break;
+        
         case UP:
             if(input == 'A' || input == 'a'){
                 myDir = LEFT;
@@ -80,6 +85,7 @@ void Player::updatePlayerDir()
                 myDir = RIGHT;
             }
             break;
+        
         case DOWN:
             if(input == 'A' || input == 'a'){
                 myDir = LEFT;
@@ -88,6 +94,7 @@ void Player::updatePlayerDir()
                 myDir = RIGHT;
             }
             break;
+        
         default:
             break;
     }
@@ -128,8 +135,7 @@ bool Player::checkFoodConsumption(Food* food, char &foodType)
 
 bool Player::checkSelfCollision()
 {
-    // Note: the tail
-    // If the snake less than 5 tiles long there is no need to check this
+    // If the snake less than 5 tiles long there is no need to check for self collision as it will be impossible
     if((playerPosList->getSize())<5)
     {
         return false; // no collision is possible if the snake is 4 tiles or less
@@ -167,7 +173,8 @@ void Player::movePlayer(Food* food)
     // Write the position of the snake head into a temporary playerPos object (type objPos)
     objPos playerPos;
     playerPosList->getHeadElement(playerPos);
-    char foodType;
+    
+    char foodType;  // define local char for changing code based on type of food consumed
     
     // PPA3 Finite State Machine logic
     // Calculating the next position of the snake
@@ -246,7 +253,7 @@ void Player::movePlayer(Food* food)
 
 }
 
-void Player::turnAround() // Temporary for testing
+void Player::turnAround()
 {
     objPos tempPos;
     
@@ -291,7 +298,5 @@ void Player::turnAround() // Temporary for testing
         playerPosList->reverseList();
     }
     
-
-
 }
 

@@ -11,6 +11,7 @@
 
 using namespace std;
 
+// Class definitions of other classes included to allow for compilation due to the way the code was constructed (due to self-referencing property of classes)
 class Player;
 class objPosArrayList;
 class Food;
@@ -34,7 +35,7 @@ class GameMechs
 
         int score;
 
-        char** board;
+        char** board;   // Pointer to a 2D array of characters for printing the board
 
     public:
         GameMechs();
@@ -60,7 +61,6 @@ class GameMechs
         // For board display I/O
         void drawBoard(Player *player, Food *food);
         void printBoard();
-        void endGameMessage();
 
 };
 

@@ -1,14 +1,11 @@
 #include "objPosArrayList.h"
 
-// Check lecture contents on general purpose array list construction, 
-// and modify it to support objPos array list construction.
-
 objPosArrayList::objPosArrayList()
 {
     // Default constructor
     sizeList = 0; // empty list
     sizeArray = 200; // default capacity
-    aList = new objPos[200]; // heap data member: array or objPos instances
+    aList = new objPos[200]; // heap data member of array containing objPos instances
 
     // Set all elements to be blank / invalid coordinates and blank character
     for(int index=0; index<200; index++)
@@ -20,7 +17,7 @@ objPosArrayList::objPosArrayList()
 
 objPosArrayList::~objPosArrayList()
 {
-    // Deleter
+    // Destructor
     delete[] aList; // delete the heap allocation
     aList = 0; // prevent misuse of pointer
 }
@@ -32,10 +29,10 @@ int objPosArrayList::getSize()
 
 void objPosArrayList::insertHead(objPos thisPos)
 {
-    // Safeguard
+    // Safeguard: prevent inserting when at full capacity
     if(sizeList==sizeArray)
     {
-        return; // do not insert anything
+        return; // do not insert anything, ending function
     }
 
     // Shuffle all elements down by 1
@@ -44,7 +41,7 @@ void objPosArrayList::insertHead(objPos thisPos)
         aList[index] = aList[index-1]; // shuffle the previous element into the current slot
     }
 
-    // Now insert the head
+    // Now insert the head at the start of the array
     aList[0] = thisPos; // using the copy constructor
 
     // Increment the size of the list
@@ -53,22 +50,22 @@ void objPosArrayList::insertHead(objPos thisPos)
 
 void objPosArrayList::insertTail(objPos thisPos)
 {
-    // Safeguard
+    // Safeguard: prevent inserting when at full capacity
     if(sizeList==sizeArray)
     {
         return; // do not insert anything
     }
 
-    // Add tail
+    // Add tail to end of array (sizeList is the blank position after the last element currently in the array)
     aList[sizeList] = thisPos; // using the copy constructor
 
-    // increment the size of the list
+    // increment the size of the list so that the information is updated for next uses
     ++sizeList;
 }
 
 void objPosArrayList::removeHead()
 {
-    // Safeguard
+    // Safeguard: prevent removal when there is nothing in the list
     if(sizeList<=0)
     {
         return; // do not do anything
@@ -80,37 +77,39 @@ void objPosArrayList::removeHead()
         aList[index] = aList[index+1]; // replace by following element
     }
 
-    // reduce size
+    // reduce size to update information
     --sizeList; // no need to acutally delete last element (lazy delete)
 }
 
 void objPosArrayList::removeTail()
 {
-    // Safeguard
+    // Safeguard: prevent removal when there is nothing in the list
     if(sizeList<=0)
     {
         return; // do not do anything
     }
 
-    // reduce size
+    // reduce size to update information
     --sizeList; // no need to acutally delete last element (lazy delete)
 }
 
 void objPosArrayList::getHeadElement(objPos &returnPos)
 {
-    returnPos.setObjPos(aList[0]);
+    returnPos.setObjPos(aList[0]);     // Return by reference, acceepting an objPos item and writing the head element into the object
+                                       // Writing into object, so no need to return (passed by reference, so directly modified)
 }
 
 void objPosArrayList::getTailElement(objPos &returnPos)
 {
-    returnPos.setObjPos(aList[sizeList-1]);
+    returnPos.setObjPos(aList[sizeList-1]);     // Return by reference, acceepting an objPos item and writing the tail element into the object
+                                                // Writing into object, so no need to return (passed by reference, so directly modified)
     // sizelist is the index of the next free slot
     // so sizelist-1 is the index of the tail element
 }
 
 void objPosArrayList::getElement(objPos &returnPos, int index)
 {
-    // Safeguard
+    // Safeguard: do not grab anything for invalid index
     // sizelist is the index of the next free slot
     // so sizelist-1 is the index of the tail element
     if(index<0 || index>=sizeList) // checking for valid indexes from 0 to sizelist-1
@@ -120,4 +119,5 @@ void objPosArrayList::getElement(objPos &returnPos, int index)
 
     // Set the returnPos to have the same parameters as the object at position index in the list
     returnPos.setObjPos(aList[index]);
+    // Returns by reference; no need to return anything in the function as the original object is modified
 }

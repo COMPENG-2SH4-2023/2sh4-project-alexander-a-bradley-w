@@ -23,7 +23,7 @@ Food::Food(Player* player, GameMechs* GM, int num)
 Food::~Food()
 {
     delete foodBucket;
-    foodBucket = NULL;
+    foodBucket = NULL;  // Prevent misuse of pointer
 }
 
 
@@ -47,7 +47,14 @@ void Food::generateFood()
         foodBucket->removeTail();
     }
 
-    // Generate a random number between 1 and 2 (index 0 and 1) to be a special food in the bucket
+    // Generate a random amount between 0 and 2 to be a special food in the bucket
+        // Numbers generated can range between -1 to 1
+    // These generated values will correspond to indexes in the food bucket, after which we will generate regular food
+        // Therefore,
+            // if -1 index, no food
+            // if 0 index, one food
+            // if 1 index, two food
+    // Therefore it will either fill in 0, 1, or 2 special foods
     specialAmount = (rand() % 3)-1;
 
     // generate number food items
@@ -61,17 +68,17 @@ void Food::generateFood()
             // Example
             // boardSizeX = 10
             // All indexes: 0 1 2 3 4 5 6 7 8 9 (10 for null character '\0')
-            // Valide indexes for position: 1 2 3 4 5 6 7 8 (i.e., not the border ones)
+            // Valid indexes for position: 1 2 3 4 5 6 7 8 (i.e., not the border ones)
             
             yCoord = (rand() % (myGM->getBoardSizeY()-2)) + 1;
             // Example
             // boardSizeY = 5
             // All indexes: 0 1 2 3 4
-            // Valide indexes for position: 1 2 3 (i.e., not the border ones)
+            // Valid indexes for position: 1 2 3 (i.e., not the border ones)
 
-            // Insert specialAmount number of special foods
+            // Insert specialAmount number of special foods based on current index
             if(i <= specialAmount) {ingredient = 'B';}   // Our bonus food symbol
-            else {ingredient = 'o';}
+            else {ingredient = 'o';}    // Our default food symbol
             
             // Set the food to those coordinates
             tempPos2.setObjPos(xCoord, yCoord, ingredient);

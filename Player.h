@@ -6,6 +6,7 @@
 #include "GameMechs.h"
 #include "Food.h"
 
+// Class definitions of other classes included to allow for compilation due to the way the code was constructed (due to self-referencing property of classes)
 class GameMechs;
 class objPosArrayList;
 class Food;
@@ -29,10 +30,13 @@ class Player
         void movePlayer(Food* food);
         bool checkFoodConsumption(Food* food, char &foodType);
         bool checkSelfCollision();
-        void turnAround();
+        
+        void turnAround(); // Used for bonus feature
 
     private:
+        // References the objPosArrayList class for a local (to class) instance
         objPosArrayList* playerPosList;       
+        
         enum Dir myDir;
 
         // Need a reference to the Main Game Mechanisms

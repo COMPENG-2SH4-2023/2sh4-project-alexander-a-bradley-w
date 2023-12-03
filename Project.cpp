@@ -49,13 +49,14 @@ void Initialize(void)
 
     Game = new GameMechs(30,15); // On heap
 
-    playerPos = new Player(Game);
+    playerPos = new Player(Game);   // Linked directly to Game
 
     foodBin = new Food(playerPos, Game, 5); // food bin for 5 items
+                                            // Linked directly to the player and to Game
 
     // Generate food
-    foodBin->generateFood(); 
-    // Initially had playerPos as a parameter       DELETE THIS COMMENT
+    foodBin->generateFood();
+
 }
 
 void GetInput(void)
@@ -99,7 +100,8 @@ void RunLogic(void)
     
     // Moving the player based on updated movement directions
     // And performing any actions associated with collisions caused by the movement
-    // like consuming food, or self-collision
+    // like consuming food, or self-collision, i.e., increasing score, snake length, special food features, etc.
+        // It thus requires the foodBin to be taken so that it knows what is going on around it as it updates movement (since Player was not directly linked to foodBin)
     playerPos->movePlayer(foodBin);
 }
 
@@ -121,8 +123,6 @@ void DrawScreen(void)
         MacUILib_printf("\nQuitting...");
     }
 
-    // Debugging messages go below
-
 }
 
 void LoopDelay(void)
@@ -133,9 +133,10 @@ void LoopDelay(void)
 
 void CleanUp(void)
 {
-    //MacUILib_clearScreen();    // commented out so that we can see the screen when program ends
+    //MacUILib_clearScreen();    // commented out so that we can see the screen when program ends for necessary information
     
-    delete Game; // delete Game from heap (GameMechs object)
+    // Delete all heap instances of objects/classes to prevent memory leakage
+    delete Game;
     delete playerPos;
     delete foodBin;
 
